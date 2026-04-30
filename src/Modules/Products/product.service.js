@@ -1,11 +1,38 @@
 import ProductModel from "../../DB/Models/product.model.js";
+import CategoryModel from "../../DB/Models/category.model.js";
+
 
 
 export const AddProduct = async (req, res) => {
 
     try {
-        const product = req.body
-        const newProduct = await ProductModel.create(product)
+        const {
+            name, price, description,
+            category, shape, color, material, stock
+        } = req.body
+        const existingProduct = await ProductModel.findOne({ name })
+        if (existingProduct) {
+            return res.status(400).json({
+                message: "Product already exists!"
+            })
+        }
+        const imagePath = req.file ? req.file.path : null;
+        if (!imagePath) {
+            return res.status(400).json({
+                message: "Image is required"
+            })
+        }
+        const newProduct = await ProductModel.create({
+            name,
+            price,
+            description,
+            image: imagePath,
+            category,
+            shape,
+            color,
+            material,
+            stock
+        })
         return res.status(201).json({
             message: "Product added successfully",
             product: newProduct
@@ -21,8 +48,8 @@ export const AddProduct = async (req, res) => {
 export const ShowProduct = async (req, res) => {
 
     try {
-        const {productName} = req.params;
-        const product = await ProductModel.findOne({name:productName})
+        const { productName } = req.params;
+        const product = await ProductModel.findOne({ name: productName })
         if (!product) {
             return res.status(404).json({
                 message: "No products found"
@@ -47,7 +74,65 @@ export const ShowProduct = async (req, res) => {
 
 }
 
-export const removeProduct = async (req, res) => {
+export const ShowAllProducts = async (req, res) => {
+    try {
+        const { shape, color, material, search, minPrice, maxPrice } = req.query;
+        let filter = {};
+        if (shape) filter.shape = shape;
+        if (color) filter.color = color;
+        if (material) filter.material = material;
+        if (search) filter.name = { $regex: search, $options: "i" };
+        if (minPrice || maxPrice) {
+            filter.price = {};
+            if (minPrice) filter.price.$gte = Number(minPrice);
+            if (maxPrice) filter.price.$lte = Number(maxPrice);
+        }
+
+        const products = await ProductModel.find(filter).populate("category", "name");
+        if (products.length === 0) {
+            return res.status(404).json({
+                message: "No products found"
+            })
+        }
+        return res.status(200).json({
+            message: "Products fetched successfully",
+            data: products
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Failed to fetch products",
+            error: error.message
+        })
+    }
+}
+
+export const updateProduct = async (req, res) => {
+    try {
+        const { ProductId } = req.params;
+        const productData = req.body
+        const product = await ProductModel.findById(
+            ProductId,
+            { $set: productData },
+            { new: true, runValidators: true })
+        if (!product) {
+            return res.status(404).json({
+                message: "No product found"
+            })
+        }
+        const updatedProduct = await ProductModel.findByIdAndUpdate(ProductId, { name, price, description, image: req.file ? req.file.path : product.image, category, shape, color, material, stock }, { new: true })
+        return res.status(200).json({
+            message: "Product updated successfully",
+            product: updatedProduct
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Couldn`t update product",
+            error: error.message
+        })
+    }
+}
+
+export const RemoveProduct = async (req, res) => {
 
     try {
         const { productId } = req.params;

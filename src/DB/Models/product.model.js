@@ -3,18 +3,23 @@ import { Schema, model } from "mongoose";
 
 const ProductSchema = new Schema({
 
-    name: String,
+    name: { type: String, required: true },
 
     description: String,
 
-    price: Number,
+    price: { type: Number, required: true },
 
-    category: String,
+    category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
 
+    shape: { type: String, enum: ["Round", "Square", "Rectangle", "Oval", 'cat-eye', 'aviator'] },
 
-    stock: Number,
+    color: String,
 
-    salesCount: Number
+    material: String,
+
+    image: { type: String, required: true },
+
+    stock: { type: Number, required: true, default: 0, min: 0 },
 }, {
     timestamps: true
 })
