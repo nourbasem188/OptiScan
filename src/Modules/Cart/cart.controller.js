@@ -11,6 +11,7 @@ router.patch("/UpdateCart/:productId", auth, CartService.UpdateCart);
 
 router.get("/ShowCart", auth, CartService.ShowCart);
 
+router.delete('/RemoveFromCart/:productId', auth, CartService.RemoveFromCart);
 
 
 

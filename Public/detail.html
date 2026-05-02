@@ -61,7 +61,7 @@
         <div class="row align-items-center py-3 px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
                 <a href="" class="text-decoration-none">
-                    <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                    <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">O</span>ptiScan</h1>
                 </a>
             </div>
             <div class="col-lg-6 col-6 text-left">
@@ -124,7 +124,7 @@
             <div class="col-lg-9">
                 <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                        <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">O</span>ptiScan</h1>
                     </a>
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
@@ -228,7 +228,7 @@
                         </button>
                     </div>
                 </div>
-                <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                <button onclick="addToCart()" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
             </div>
         </div>
     </div>
@@ -435,6 +435,8 @@
 
     <!-- Template Javascript -->
     <script>
+let currentProduct = null; // متغير عشان نخزن المنتج الحالي
+
 document.addEventListener('DOMContentLoaded', function() {
     // 1. التأكد من سحب الـ ID صح من الـ URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -446,19 +448,73 @@ if (productId) {
         .then(res => res.json())
         .then(response => {
             // تحديث البيانات في الـ HTML
-            const product = response.data;
-            document.getElementById('product-name').innerText = product.name; 
-            document.getElementById('product-price').innerText = `$${product.price}`;
-            document.getElementById('product-description').innerText = product.description;
-            document.getElementById('product-img').src = product.image;
-            document.getElementById('product-tab-description').innerText = product.moreDescription;
-            document.getElementById('product-info-tab').innerText = product.moreInfo;
+            currentProduct = response.data; // نخزن المنتج
+            document.getElementById('product-name').innerText = currentProduct.name; 
+            document.getElementById('product-price').innerText = `$${currentProduct.price}`;
+            document.getElementById('product-description').innerText = currentProduct.description;
+            document.getElementById('product-img').src = currentProduct.image;
+            document.getElementById('product-tab-description').innerText = currentProduct.moreDescription;
+            document.getElementById('product-info-tab').innerText = currentProduct.moreInfo;
         })
         .catch(err => console.error("Error:", err));
 } else {
     console.error("No product ID found in URL!");
 }
 });
+
+// دالة إضافة المنتج للسلة
+function addToCart() {
+    if (!currentProduct) {
+        alert("Product not loaded yet!");
+        return;
+    }
+
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+        alert("Please login first! 🕶️");
+        window.location.href = "login.html";
+        return;
+    }
+
+    // جلب الكمية من الـ input
+    const quantity = parseInt(document.querySelector('.input-group input').value) || 1;
+
+    fetch('/cart/add-to-cart', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            productId: currentProduct._id,
+            quantity: quantity
+        })
+    })
+    .then(response => {
+        if (response.status === 401) {
+            throw new Error("Unauthorized");
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.message.includes("added") || data.message.includes("created")) {
+            alert("Product added to cart! 🛒");
+            window.location.href = 'cart.html';
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(err => {
+        console.error("Add to cart error:", err);
+        if (err.message === "Unauthorized") {
+            alert("Please login first! 🕶️");
+            window.location.href = "login.html";
+        } else {
+            alert("Failed to add product to cart");
+        }
+    });
+}
 </script>
 </body>
 

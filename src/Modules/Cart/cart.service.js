@@ -83,13 +83,37 @@ export const ShowCart = async (req, res) => {
         const userId = req.user._id;
         const cart = await CartModel.findOne({ userId }).populate('products.productId');
         if (!cart) {
-            return res.status(404).json({ message: "Cart not found" });
+            // Return empty cart instead of 404
+            return res.status(200).json({ message: "Cart fetched successfully", cart: { products: [] } });
         }
 
         return res.status(200).json({ message: "Cart fetched successfully", cart });
     } catch (error) {
         return res.status(500).json({
             message: "Failed to fetch cart",
+            error: error.message
+        })
+    }
+}
+
+export const RemoveFromCart = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const userId = req.user._id;
+        const cart = await CartModel.findOne({ userId });
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+        const itemIndex = cart.products.findIndex(p => p.productId.toString() === productId);
+        if (itemIndex === -1) {
+            return res.status(404).json({ message: "Product not found in cart" });
+        }
+        cart.products.splice(itemIndex, 1);
+        await cart.save();
+        return res.status(200).json({ message: "Product removed from cart", cart });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Failed to remove product from cart",
             error: error.message
         })
     }
