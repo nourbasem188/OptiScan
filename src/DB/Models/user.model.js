@@ -13,7 +13,13 @@ const UserSchema = new Schema({
     
     gender: { type: String, enum: ["Male", "Female"] },
 
-    age: Number
+    age: Number,
+
+    role: { 
+        type: String, 
+        enum: ['User', 'Admin'], 
+        default: 'User' 
+    }
 
 }, {
     timestamps: true

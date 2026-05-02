@@ -76,12 +76,19 @@ export const ShowProduct = async (req, res) => {
 
 export const ShowAllProducts = async (req, res) => {
     try {
-        const { shape, color, material, search, minPrice, maxPrice } = req.query;
+        // 1. ضيفي category هنا مع باقي الحاجات اللي جاية من query
+        const { category, shape, color, material, search, minPrice, maxPrice } = req.query;
+        
         let filter = {};
+
+        // 2. ضيفي السطر ده عشان الفلترة بالكاتيجوري تشتغل
+        if (category) filter.category = category;
+
         if (shape) filter.shape = shape;
         if (color) filter.color = color;
         if (material) filter.material = material;
         if (search) filter.name = { $regex: search, $options: "i" };
+        
         if (minPrice || maxPrice) {
             filter.price = {};
             if (minPrice) filter.price.$gte = Number(minPrice);
@@ -89,6 +96,7 @@ export const ShowAllProducts = async (req, res) => {
         }
 
         const products = await ProductModel.find(filter).populate("category", "name");
+
         if (products.length === 0) {
             return res.status(404).json({
                 message: "No products found"
@@ -106,37 +114,59 @@ export const ShowAllProducts = async (req, res) => {
     }
 }
 
+
+export const ShowById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await ProductModel.findById(id);
+        
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        return res.status(200).json({
+            message: "Product details found",
+            data: product
+        });
+    } catch (error) {
+        return res.status(500).json({ message: "Error", error: error.message });
+    }
+}
+
 export const updateProduct = async (req, res) => {
     try {
         const { ProductId } = req.params;
         const productData = req.body
-        const product = await ProductModel.findById(
-            ProductId,
+        
+        const updatedProduct = await ProductModel.findByIdAndUpdate(
+            ProductId, 
             { $set: productData },
-            { new: true, runValidators: true })
-        if (!product) {
+            { new: true, runValidators: true }
+        );
+        
+        if (!updatedProduct) {
             return res.status(404).json({
                 message: "No product found"
-            })
+            });
         }
-        const updatedProduct = await ProductModel.findByIdAndUpdate(ProductId, { name, price, description, image: req.file ? req.file.path : product.image, category, shape, color, material, stock }, { new: true })
+        
         return res.status(200).json({
             message: "Product updated successfully",
             product: updatedProduct
-        })
+        });
     } catch (error) {
         return res.status(500).json({
             message: "Couldn`t update product",
             error: error.message
-        })
+        });
     }
 }
 
 export const RemoveProduct = async (req, res) => {
 
     try {
-        const { productId } = req.params;
-        const removedProduct = await ProductModel.findOneAndDelete(productId)
+        const { ProductId } = req.params;
+        const removedProduct = await ProductModel.findByIdAndDelete(ProductId)
         if (!removedProduct) {
             return res.status(404).json({
                 message: "Product not found",

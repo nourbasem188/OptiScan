@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import {Schema,model,Types} from "mongoose";
 
 const CartSchema = new Schema({

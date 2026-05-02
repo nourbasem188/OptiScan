@@ -6,13 +6,16 @@ const OrderSchema=new Schema({
     userId:{type:Types.ObjectId,ref:"User",required:true},
     products:[{
         productId:{type:Types.ObjectId,ref:"Product",required:true},
-        quantity:{type:Number,required:true,default:1,min:1}
+        quantity:{type:Number,required:true,default:1,min:1},
+        unitPrice: { type: Number, required: true }, // السعر وقت الطلب
+        finalPrice: { type: Number, required: true }
     }],
-    address:String,
-    phone:Number,
+    totalPrice: { type: Number, required: true },
+    address:{type:String,required:true},
+    phone:{type:Number,required:true},
     status:{type:String,enum:["Pending","Shipped","Delivered","Cancelled"],default:"Pending"},
-    payment:{type:String,enum:["Cash on Delivery","Credit Card"," InstaPay"],default:"Cash on Delivery"},
-})
+    paymentType:{type:String,enum:["Cash on Delivery","Credit Card"," InstaPay"],default:"Cash on Delivery"}
+},{timestamps:true})
 
 
 
