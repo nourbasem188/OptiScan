@@ -83,9 +83,9 @@
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge">0</span>
                 </a>
-                <a href="" class="btn border">
+                <a href="cart.html" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge" id="cart-count"></span>
                 </a>
             </div>
         </div>
@@ -621,6 +621,7 @@
             <script src="mail/contact.js"></script>
 
             <!-- Template Javascript -->
+            <script src="/js/core.js"></script>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -665,7 +666,7 @@
                                     <i class="fas fa-eye text-primary mr-1"></i>View Detail
                                 </a>
                                 <!-- زرار الإضافة ينادي الدالة اللي تحت -->
-                                <button onclick="addToCart('${prod._id}', '${prod.name}', '${prod.price}', '${prod.image}')" class="btn btn-sm text-dark p-0 border-0 bg-transparent">
+                                <button onclick="addToCart('${prod._id}')" class="btn btn-sm text-dark p-0 border-0 bg-transparent">
                                     <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
                                 </button>
                             </div>
@@ -678,113 +679,31 @@
                             document.getElementById('products-list').innerHTML = '<h3 class="text-center w-100">Error loading products</h3>';
                         });
                 });
-                
-                function quantityController(event, id) {
-                    const input = event.target;
-                    let quantity = parseInt(input.value);
 
-                    if (isNaN(quantity) || quantity < 1) {
-                        quantity = 1;
-                        input.value = quantity;
-                    }
+                function addToCart(id) {
+                    // نداء الدالة المركزية للتأكد من التوكن
+                    const token = getAuthToken();
+                    if (!token) return;
 
-                    // تحديث الكمية في السلة عبر الـ API
-                    const token = localStorage.getItem("token");
-
-                    if (!token) {
-                        alert("Please login first! 🕶️");
-                        window.location.href = "login.html";
-                        return;
-                    }
-
-                    fetch('/cart/update-cart', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            productId: id,
-                            quantity: quantity
-                        })
-                    })
-                        .then(response => {
-                            if (response.status === 401) {
-                                throw new Error("Unauthorized");
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.message.includes("updated")) {
-                                alert("Cart updated! 🛒");
-                                // window.location.href = 'cart.html';
-                            } else {
-                                alert("Error: " + data.message);
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Update cart error:", err);
-                            if (err.message === "Unauthorized") {
-                                alert("Please login first! 🕶️");
-                                window.location.href = "login.html";
-                            } else {
-                                alert("Failed to update cart");
-                            }
-                        });
-                }
-
-
-
-
-                // 4. دالة إضافة المنتج للسلة عبر الـ API
-                function addToCart(id, name, price, image) {
-                    // جلب التوكن
-                    const token = localStorage.getItem("token");
-
-                    if (!token) {
-                        alert("Please login first! 🕶️");
-                        window.location.href = "login.html";
-                        return;
-                    }
-
-                    // إرسال طلب للـ API
                     fetch('/cart/add-to-cart', {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            productId: id,
-                            quantity: 1
-                        })
+                        body: JSON.stringify({ productId: id, quantity: 1 })
                     })
-                        .then(response => {
-                            if (response.status === 401) {
-                                throw new Error("Unauthorized");
-                            }
-                            return response.json();
-                        })
+                        .then(res => res.json())
                         .then(data => {
+                            // لو الإضافة نجحت، بننادي دالة تحديث العداد
                             if (data.message.includes("added") || data.message.includes("created")) {
-                                // توجيه لصفحة الكارت
-                                alert("Product added to cart! 🛒");
-                                // window.location.href = 'cart.html';
-                            } else {
-                                alert("Error: " + data.message);
+                                alert("Product added! 🛒");
+                                const cartCount = (data.cart && data.cart.products) ? data.cart.products.length : 0;
+                                updateCartBadge(cartCount);
                             }
                         })
-                        .catch(err => {
-                            console.error("Add to cart error:", err);
-                            if (err.message === "Unauthorized") {
-                                alert("Please login first! 🕶️");
-                                window.location.href = "login.html";
-                            } else {
-                                alert("Failed to add product to cart");
-                            }
-                        });
+                        .catch(handleApiError); // استخدام معالج الأخطاء الموحد
                 }
-            </script>
             </script>
 </body>
 

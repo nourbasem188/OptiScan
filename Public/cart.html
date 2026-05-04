@@ -85,7 +85,7 @@
                 </a>
                 <a href="" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge" id="cart-count">0</span>
                 </a>
             </div>
         </div>
@@ -312,12 +312,16 @@
     <script src="mail/jqBootstrapValidation.min.js"></script>
     <script src="mail/contact.js"></script>
 
+    <!-- Core Javascript -->
+    <script src="/js/core.js"></script>
+
     <!-- Template Javascript -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const token = localStorage.getItem("token");
 
             if (!token) {
+                alert("Please login first! 🕶️");
                 window.location.href = "login.html";
                 return;
             }
@@ -328,10 +332,11 @@
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
+                
             })
                 .then(response => response.json())
                 .then(data => {
-                    const cartContainer = document.getElementById('optiscan_cart');
+                    const cartContainer = document.getElementById('optiscan_cart') || document.getElementById('optiscan_cart');
                     const products = (data.cart && data.cart.products) ? data.cart.products : [];
 
                     if (products.length === 0) {

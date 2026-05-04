@@ -50,7 +50,7 @@ export const UpdateCart = async (req, res) => {
         if (itemIndex === -1) return res.status(404).json({ message: "Product not found in cart" });
 
         const product = await ProductModel.findById(productId);
-        
+
         if (action === "inc") {
             cart.products[itemIndex].quantity += 1;
             cart.totalPrice += product.price;
@@ -69,7 +69,7 @@ export const UpdateCart = async (req, res) => {
         }
         if (cart.totalPrice < 0) cart.totalPrice = 0;
         await cart.save();
-        return res.status(200).json({ message: "Cart updated successfully", cart});
+        return res.status(200).json({ message: "Cart updated successfully", cart });
     } catch (error) {
         return res.status(500).json({
             message: "Failed to update cart",
