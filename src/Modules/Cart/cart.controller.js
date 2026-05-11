@@ -5,7 +5,7 @@ import { auth } from "../../Middleware/auth.middleware.js";
 
 const router = Router();
 
-router.post("/add-to-cart", auth, CartService.AddToCart);
+router.post("/AddToCart", auth, CartService.AddToCart);
 
 router.patch("/UpdateCart/:productId", auth, CartService.UpdateCart);
 

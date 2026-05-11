@@ -3,27 +3,34 @@
 
 <head>
     <meta charset="utf-8">
-    <title>EShopper - Bootstrap Shop Template</title>
+    <title>OptiScan - Online Eyewear Store</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta content="Eyewear, Glasses, Sunglasses, OptiScan" name="keywords">
+    <meta content="OptiScan - Best Online Store for Medical and Sun Glasses" name="description">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    </noscript>
 
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <link rel="preload" href="css/style.min.css" as="style" onload="this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="css/style.min.css">
+    </noscript>
 </head>
 
 <body>
@@ -79,11 +86,7 @@
                 </form>
             </div>
             <div class="col-lg-3 col-6 text-right">
-                <a href="" class="btn border">
-                    <i class="fas fa-heart text-primary"></i>
-                    <span class="badge">0</span>
-                </a>
-                <a href="" class="btn border">
+                <a href="cart.html" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
                     <span class="badge" id="cart-count">0</span>
                 </a>
@@ -103,8 +106,8 @@
                     <h6 class="m-0">Categories</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
-                <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0"
-                    id="navbar-vertical">
+                <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light"
+                    id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1;">
                     <div class="navbar-nav w-100 overflow-hidden" style="height: 328px">
 
                         <a href="shop.html?category=69f4b85a3a7003687c089632" class="nav-item nav-link">Men's Frames</a>
@@ -135,19 +138,14 @@
                         <div class="navbar-nav mr-auto py-0">
                             <a href="index.html" class="nav-item nav-link">Home</a>
                             <a href="shop.html" class="nav-item nav-link">Shop</a>
-                            <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
                             <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown">Pages</a>
+                                <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown">Account</a>
                                 <div class="dropdown-menu rounded-0 m-0">
                                     <a href="cart.html" class="dropdown-item">Shopping Cart</a>
                                     <a href="checkout.html" class="dropdown-item">Checkout</a>
                                 </div>
                             </div>
                             <a href="contact.html" class="nav-item nav-link">Contact</a>
-                        </div>
-                        <div class="navbar-nav ml-auto py-0">
-                            <a href="" class="nav-item nav-link">Login</a>
-                            <a href="" class="nav-item nav-link">Register</a>
                         </div>
                     </div>
                 </nav>
@@ -200,10 +198,13 @@
                             <h5 class="font-weight-bold">Total</h5>
                             <h5 class="font-weight-bold" id="final-total">0 EGP</h5>
                         </div>
-                        <button class="btn btn-block btn-primary my-3 py-3 font-weight-bold"
+                        <a href="checkout.html" class="btn btn-block btn-primary my-3 py-3 font-weight-bold">
+                            Proceed To Checkout
+                        </a>
+                        <!-- <button class="btn btn-block btn-primary my-3 py-3 font-weight-bold"
                             onclick="proceedToCheckout()">
                             Proceed To Checkout
-                        </button>
+                        </button> -->
                     </div>
                 </div>
             </div>
@@ -218,13 +219,13 @@
             <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                 <a href="" class="text-decoration-none">
                     <h1 class="mb-4 display-5 font-weight-semi-bold"><span
-                            class="text-primary font-weight-bold border border-white px-3 mr-1">E</span>Shopper</h1>
+                            class="text-primary font-weight-bold border border-white px-3 mr-1">O</span>OptiScan</h1>
                 </a>
-                <p>Dolore erat dolor sit lorem vero amet. Sed sit lorem magna, ipsum no sit erat lorem et magna ipsum
-                    dolore amet erat.</p>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+                <p>Your vision is our priority. Providing the finest eyewear and professional optical solutions tailored
+                    to your lifestyle.</p>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Mansoura, Egypt</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@optiscan.com</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+20 123 456 789</p>
             </div>
             <div class="col-lg-8 col-md-12">
                 <div class="row">
@@ -244,20 +245,15 @@
                                 Us</a>
                         </div>
                     </div>
+                    <!-- تم تغيير السيكشن التاني لـ Help Center بدل تكرار الروابط -->
                     <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                        <h5 class="font-weight-bold text-dark mb-4">Help Center</h5>
                         <div class="d-flex flex-column justify-content-start">
-                            <a class="text-dark mb-2" href="index.html"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our
-                                Shop</a>
-                            <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop
-                                Detail</a>
-                            <a class="text-dark mb-2" href="cart.html"><i class="fa fa-angle-right mr-2"></i>Shopping
-                                Cart</a>
-                            <a class="text-dark mb-2" href="checkout.html"><i
-                                    class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact
-                                Us</a>
+                            <a class="text-dark mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>FAQs</a>
+                            <a class="text-dark mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shipping Policy</a>
+                            <a class="text-dark mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Return Policy</a>
+                            <a class="text-dark mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Privacy Policy</a>
+                            <a class="text-dark" href="#"><i class="fa fa-angle-right mr-2"></i>Terms of Service</a>
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
@@ -283,15 +279,13 @@
         <div class="row border-top border-light mx-xl-5 py-4">
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-dark">
-                    &copy; <a class="text-dark font-weight-semi-bold" href="#">Your Site Name</a>. All Rights Reserved.
-                    Designed
-                    by
-                    <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com">HTML Codex</a><br>
-                    Distributed By <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                    &copy; <a class="text-dark font-weight-semi-bold" href="#">OptiScan</a>. All Rights Reserved.
+                    Developed by
+                    <a class="text-dark font-weight-semi-bold" href="#">Nour</a>
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="">
+                <img class="img-fluid" src="img/payments.png" alt="Payment Methods">
             </div>
         </div>
     </div>
@@ -317,6 +311,34 @@
 
     <!-- Template Javascript -->
     <script>
+        const badge = document.getElementById('cart-count');
+        const token = localStorage.getItem("token");
+
+        if (token && token !== "undefined" && token !== "null") {
+            // لو فيه توكن، نروح نسأل السيرفر اليوزر ده عنده كام منتج
+            fetch('/cart/ShowCart', {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.cart && data.cart.products) {
+                        // بنجمع الـ quantity لكل المنتجات
+                        const totalQuantity = data.cart.products.reduce((sum, item) => sum + (item.quantity || 0), 0);
+                        if (badge) badge.textContent = totalQuantity;
+                    } else {
+                        if (badge) badge.textContent = 0;
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching cart for badge:", err);
+                    if (badge) badge.textContent = 0;
+                });
+        } else {
+            // لو مفيش توكن (زائر)، العداد يبقى 0 من غير طلبات للسيرفر
+            if (badge) badge.textContent = 0;
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const token = localStorage.getItem("token");
 
@@ -332,7 +354,7 @@
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
-                
+
             })
                 .then(response => response.json())
                 .then(data => {
