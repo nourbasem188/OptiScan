@@ -1,38 +1,38 @@
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+        const email = /** @type {HTMLInputElement} */ (document.getElementById('email')).value;
+        const password = /** @type {HTMLInputElement} */ (document.getElementById('password')).value;
 
-    try {
-        const response = await fetch("http://localhost:3000/user/logIn", { // نفس اللينك اللي جربتيه في بوست مان
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
+        try {
+            const response = await fetch("http://localhost:3000/user/logIn", { // نفس اللينك اللي جربتيه في بوست مان
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
 
-        const result = await response.json();
+            const result = await response.json();
 
-        if (response.ok) {
-            // حفظ التوكن والـ role في المتصفح
-            localStorage.setItem("token", result.token);
-            localStorage.setItem("userRole", result.role);
+            if (response.ok) {
+                // حفظ التوكن والـ role في المتصفح
+                localStorage.setItem("token", result.token);
+                localStorage.setItem("userRole", result.role);
 
-            // التوجيه بناءً على الصلاحية اللي راجعة من السيرفر
-            if (result.role === "Admin") {
-                window.location.href = "admin-dashboard.html"; // ملفك اللي في الصورة
+                // التوجيه بناءً على الصلاحية اللي راجعة من السيرفر
+                if (result.role === "Admin") {
+                    window.location.href = "admin-dashboard.html"; // ملفك اللي في الصورة
+                } else {
+                    window.location.href = "index.html";
+                }
             } else {
-                window.location.href = "index.html";
+                alert(result.message || "Login failed");
             }
-        } else {
-            alert(result.message || "Login failed");
+        } catch (error) {
+            console.error("Login error:", error);
         }
-    } catch (error) {
-        console.error("Login error:", error);
-    }
-});
+    });
 }
 
 const signupForm = document.getElementById('signupForm');
@@ -41,12 +41,12 @@ if (signupForm) {
         e.preventDefault();
         console.log("Signup form submitted");
 
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const phone = document.getElementById('phone').value;
-        const age = document.getElementById('age').value;
-        const gender = document.getElementById('gender').value;
+        const name = /** @type {HTMLInputElement} */ (document.getElementById('name')).value;
+        const email = /** @type {HTMLInputElement} */ (document.getElementById('email')).value;
+        const password = /** @type {HTMLInputElement} */ (document.getElementById('password')).value;
+        const phone = /** @type {HTMLInputElement} */ (document.getElementById('phone')).value;
+        const age = /** @type {HTMLInputElement} */ (document.getElementById('age')).value;
+        const gender = /** @type {HTMLInputElement} */ (document.getElementById('gender')).value;
 
         console.log("Form data:", { name, email, password, phone, age, gender });
 
@@ -69,7 +69,7 @@ if (signupForm) {
             }
         } catch (error) {
             console.error("Sign up error:", error);
-            alert("Sign up error: " + error.message);
+            alert("Sign up error: " + /** @type {Error} */ (error).message);
         }
     });
 }

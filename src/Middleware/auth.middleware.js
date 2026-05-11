@@ -9,12 +9,12 @@ export const auth = async (req, res, next) => {
         if (!authorization) {
             return res.status(401).json({ message: "Token is required" });
         }
-        
-        const token = authorization.startsWith('Bearer ') 
-            ? authorization.slice(7) 
+
+        const token = authorization.startsWith('Bearer ')
+            ? authorization.slice(7)
             : authorization;
-            
-        const decoded = jwt.verify(token, process.env.TOKEN_SECRET||"OptiScan_Secret_Key_2026");
+
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
 
         if (!decoded) {
             return res.status(401).json({ message: "Invalid Token" });

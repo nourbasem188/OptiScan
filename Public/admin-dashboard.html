@@ -1,93 +1,116 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OptiScan - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .main-container { margin-top: 50px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-        .table img { border-radius: 5px; object-fit: cover; }
-        .edit-highlight { border: 2px solid #ffc107 !important; }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            margin-top: 50px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table img {
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        .edit-highlight {
+            border: 2px solid #ffc107 !important;
+        }
     </style>
 </head>
-<body>
 
-<div class="container main-container">
-    <h2 class="text-center mb-4">OptiScan Admin Dashboard 🕶️</h2>
-    
-    <div class="card mb-5" id="formCard">
-        <div class="card-header bg-primary text-white" id="formTitle">Add New Product</div>
-        <div class="card-body">
-            <form id="productForm">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Glass Name</label>
-                        <input type="text" id="name" class="form-control" required>
+<body>
+    <div class="container main-container">
+        <span class="return-to-website mb-3 d-block">
+            <a href="index.html" class="text-decoration-none text-secondary">&larr; Back to Website</a>
+        </span>
+        <h2 class="text-center mb-4">OptiScan Admin Dashboard 🕶️</h2>
+
+        <div class="card mb-5" id="formCard">
+            <div class="card-header bg-primary text-white" id="formTitle">Add New Product</div>
+            <div class="card-body">
+                <form id="productForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Glass Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Price($)</label>
+                            <input type="number" id="price" class="form-control" required>
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Price($)</label>
-                        <input type="number" id="price" class="form-control" required>
+                    <div class="mb-3">
+                        <label class="form-label">Short Description</label>
+                        <textarea id="description" class="form-control" rows="2"></textarea>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Short Description</label>
-                    <textarea id="description" class="form-control" rows="2"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">More Description</label>
-                    <textarea id="moreDescription" class="form-control" rows="3"></textarea>
-                </div>
-                <div class="mb-3">
-    <label class="form-label">Product Information (Details)</label>
-    <textarea id="information" class="form-control" rows="3" placeholder="اكتبي تفاصيل إضافية هنا..."></textarea>
-</div>
-                <div class="mb-3">
-                    <label class="form-label">Image URL</label>
-                    <input type="text" id="image" class="form-control">
-                </div>
-                <button type="submit" id="submitBtn" class="btn btn-success w-100">Add Product To Database</button>
-                <button type="button" id="cancelEditBtn" class="btn btn-secondary w-100 mt-2 d-none" onclick="resetForm()">Cancel Edit</button>
-            </form>
+                    <div class="mb-3">
+                        <label class="form-label">More Description</label>
+                        <textarea id="moreDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Product Information (Details)</label>
+                        <textarea id="information" class="form-control" rows="3"
+                            placeholder="اكتبي تفاصيل إضافية هنا..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Image URL</label>
+                        <input type="text" id="image" class="form-control">
+                    </div>
+                    <button type="submit" id="submitBtn" class="btn btn-success w-100">Add Product To Database</button>
+                    <button type="button" id="cancelEditBtn" class="btn btn-secondary w-100 mt-2 d-none"
+                        onclick="resetForm()">Cancel Edit</button>
+                </form>
+            </div>
+        </div>
+
+        <h4 class="mb-3">Products List</h4>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody"></tbody>
+            </table>
         </div>
     </div>
 
-    <h4 class="mb-3">Products List</h4>
-    <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="productTableBody"></tbody>
-        </table>
-    </div>
-</div>
+    <script>
+        // 1. روابط الـ APIs
+        const API_URL = "/product/AddProduct";
+        const GET_PRODUCTS_URL = "/product/ShowAllProducts";
+        const UPDATE_URL = "/product/UpdateProduct"; // تأكدي إن ده نفس المسار في الـ Router عندك
 
-<script>
-    // 1. روابط الـ APIs
-    const API_URL = "/product/AddProduct"; 
-    const GET_PRODUCTS_URL = "/product/ShowAllProducts";
-    const UPDATE_URL = "/product/UpdateProduct"; // تأكدي إن ده نفس المسار في الـ Router عندك
+        let isEditMode = false;
+        let currentProductId = null;
 
-    let isEditMode = false;
-    let currentProductId = null;
+        // 2. تحميل المنتجات
+        async function loadProducts() {
+            try {
+                const res = await fetch(GET_PRODUCTS_URL);
+                const data = await res.json();
+                const tableBody = document.getElementById('productTableBody');
+                tableBody.innerHTML = '';
 
-    // 2. تحميل المنتجات
-    async function loadProducts() {
-        try {
-            const res = await fetch(GET_PRODUCTS_URL);
-            const data = await res.json();
-            const tableBody = document.getElementById('productTableBody');
-            tableBody.innerHTML = '';
-
-            data.data.forEach(p => {
-                tableBody.innerHTML += `
+                data.data.forEach(p => {
+                    tableBody.innerHTML += `
                     <tr>
                         <td><img src="${p.image}" width="60" height="40"></td>
                         <td>${p.name}</td>
@@ -98,103 +121,104 @@
                         </td>
                     </tr>
                 `;
-            });
-        } catch (err) { console.error("Error loading products", err); }
-    }
-
-    // 3. تحضير التعديل (نقل البيانات للفورم)
-    function prepareEdit(id, name, price, desc, moreDesc, moreInfo, img) {
-        isEditMode = true;
-        currentProductId = id;
-
-        document.getElementById('name').value = name;
-        document.getElementById('price').value = price;
-        document.getElementById('description').value = desc;
-        document.getElementById('moreDescription').value = moreDesc;
-        document.getElementById('information').value = moreInfo;
-        document.getElementById('image').value = img;
-
-        // تغيير شكل الفورم
-        document.getElementById('formTitle').innerText = "Update Product";
-        document.getElementById('formTitle').className = "card-header bg-warning text-dark";
-        document.getElementById('submitBtn').innerText = "Update Product Now";
-        document.getElementById('submitBtn').className = "btn btn-warning w-100";
-        document.getElementById('cancelEditBtn').classList.remove('d-none');
-        window.scrollTo(0, 0); // يطلع فوق للفورم
-    }
-
-    // 4. إعادة تعيين الفورم (Reset)
-    function resetForm() {
-        isEditMode = false;
-        currentProductId = null;
-        document.getElementById('productForm').reset();
-        document.getElementById('formTitle').innerText = "Add New Product";
-        document.getElementById('formTitle').className = "card-header bg-primary text-white";
-        document.getElementById('submitBtn').innerText = "Add Product To Database";
-        document.getElementById('submitBtn').className = "btn btn-success w-100";
-        document.getElementById('cancelEditBtn').classList.add('d-none');
-    }
-
-    // 5. الإرسال (إضافة أو تعديل)
-    document.getElementById('productForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const productData = {
-            name: document.getElementById('name').value,
-            price: document.getElementById('price').value,
-            description: document.getElementById('description').value,
-            moreDescription: document.getElementById('moreDescription').value,
-            moreInfo:document.getElementById('information').value,
-            image: document.getElementById('image').value
-        };
-
-        // تحديد الرابط والميثود بناءً على الحالة
-        const targetURL = isEditMode ? `${UPDATE_URL}/${currentProductId}` : API_URL;
-        const method = isEditMode ? 'PUT' : 'POST';
-
-        try {
-            console.log("Sending request to:", targetURL);
-            console.log("Method:", method);
-            console.log("Data:", productData);
-            console.log("Token:", localStorage.getItem('token'));
-            
-            const res = await fetch(targetURL, {
-                method: method,
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify(productData)
-            });
-
-            console.log("Response status:", res.status);
-            const responseText = await res.text();
-            console.log("Response:", responseText);
-
-            if (res.ok) {
-                alert(isEditMode ? "Product updated successfully!" : "Product added successfully!");
-                resetForm();
-                loadProducts();
-            } else {
-                alert("Error happened during processing.");
-            }
-        } catch (err) { console.error("Error sending data", err); }
-    });
-
-    // دالة المسح (للاحتياط)
-    async function deleteProduct(id) {
-        if(confirm("Are you sure?")) {
-            try {
-                const res = await fetch(`/product/RemoveProduct/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
-                if(res.ok) loadProducts();
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error("Error loading products", err); }
         }
-    }
 
-    loadProducts();
-</script>
+        // 3. تحضير التعديل (نقل البيانات للفورم)
+        function prepareEdit(id, name, price, desc, moreDesc, moreInfo, img) {
+            isEditMode = true;
+            currentProductId = id;
+
+            document.getElementById('name').value = name;
+            document.getElementById('price').value = price;
+            document.getElementById('description').value = desc;
+            document.getElementById('moreDescription').value = moreDesc;
+            document.getElementById('information').value = moreInfo;
+            document.getElementById('image').value = img;
+
+            // تغيير شكل الفورم
+            document.getElementById('formTitle').innerText = "Update Product";
+            document.getElementById('formTitle').className = "card-header bg-warning text-dark";
+            document.getElementById('submitBtn').innerText = "Update Product Now";
+            document.getElementById('submitBtn').className = "btn btn-warning w-100";
+            document.getElementById('cancelEditBtn').classList.remove('d-none');
+            window.scrollTo(0, 0); // يطلع فوق للفورم
+        }
+
+        // 4. إعادة تعيين الفورم (Reset)
+        function resetForm() {
+            isEditMode = false;
+            currentProductId = null;
+            document.getElementById('productForm').reset();
+            document.getElementById('formTitle').innerText = "Add New Product";
+            document.getElementById('formTitle').className = "card-header bg-primary text-white";
+            document.getElementById('submitBtn').innerText = "Add Product To Database";
+            document.getElementById('submitBtn').className = "btn btn-success w-100";
+            document.getElementById('cancelEditBtn').classList.add('d-none');
+        }
+
+        // 5. الإرسال (إضافة أو تعديل)
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const productData = {
+                name: document.getElementById('name').value,
+                price: document.getElementById('price').value,
+                description: document.getElementById('description').value,
+                moreDescription: document.getElementById('moreDescription').value,
+                moreInfo: document.getElementById('information').value,
+                image: document.getElementById('image').value
+            };
+
+            // تحديد الرابط والميثود بناءً على الحالة
+            const targetURL = isEditMode ? `${UPDATE_URL}/${currentProductId}` : API_URL;
+            const method = isEditMode ? 'PUT' : 'POST';
+
+            try {
+                console.log("Sending request to:", targetURL);
+                console.log("Method:", method);
+                console.log("Data:", productData);
+                console.log("Token:", localStorage.getItem('token'));
+
+                const res = await fetch(targetURL, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify(productData)
+                });
+
+                console.log("Response status:", res.status);
+                const responseText = await res.text();
+                console.log("Response:", responseText);
+
+                if (res.ok) {
+                    alert(isEditMode ? "Product updated successfully!" : "Product added successfully!");
+                    resetForm();
+                    loadProducts();
+                } else {
+                    alert("Error happened during processing.");
+                }
+            } catch (err) { console.error("Error sending data", err); }
+        });
+
+        // دالة المسح (للاحتياط)
+        async function deleteProduct(id) {
+            if (confirm("Are you sure?")) {
+                try {
+                    const res = await fetch(`/product/RemoveProduct/${id}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    if (res.ok) loadProducts();
+                } catch (err) { console.error(err); }
+            }
+        }
+
+        loadProducts();
+    </script>
 </body>
+
 </html>
