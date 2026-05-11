@@ -3,7 +3,7 @@ import { Schema,model } from "mongoose";
 
 const Admin = new Schema({
     username: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // طبعاً بنعملها Hash بعدين
+    password: { type: String, required: true }, 
     role: { type: String, default: 'user' }
 });
 

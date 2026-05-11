@@ -10,7 +10,6 @@ export const auth = async (req, res, next) => {
             return res.status(401).json({ message: "Token is required" });
         }
         
-        // Extract token from "Bearer [token]" format
         const token = authorization.startsWith('Bearer ') 
             ? authorization.slice(7) 
             : authorization;

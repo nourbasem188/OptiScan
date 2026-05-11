@@ -76,12 +76,10 @@ export const ShowProduct = async (req, res) => {
 
 export const ShowAllProducts = async (req, res) => {
     try {
-        // 1. ضيفي category هنا مع باقي الحاجات اللي جاية من query
         const { category, shape, color, material, search, minPrice, maxPrice } = req.query;
         
         let filter = {};
 
-        // 2. ضيفي السطر ده عشان الفلترة بالكاتيجوري تشتغل
         if (category) filter.category = category;
 
         if (shape) filter.shape = shape;

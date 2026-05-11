@@ -41,7 +41,6 @@ export const logIn = async (req, res) => {
             return res.status(400).json({ message: "Password is incorrect" });
         }
 
-        // التعديل هنا: بنضيف الـ role جوه الـ Token
         const token = jwt.sign(
             { id: user._id, email: user.email, role: user.role }, // ضفنا role هنا
             process.env.TOKEN_SECRET || "OptiScan_Secret_Key_2026", 
@@ -51,11 +50,11 @@ export const logIn = async (req, res) => {
         return res.status(200).json({
             message: "User logged in successfully",
             token: token,
-            role: user.role, // بنبعت الـ role للفرونت إند عشان يوجهه صح
+            role: user.role,
             data: {
                 name: user.name,
                 email: user.email,
-                role: user.role // تأكيد الصلاحية
+                role: user.role 
             }
         });
     } catch (error) {

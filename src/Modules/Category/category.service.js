@@ -96,23 +96,18 @@ export const ShowByCategoryId = async (req, res) => {
     try {
         const { categoryId } = req.params;
 
-        // 1. نتأكد إن القسم موجود أصلاً
         const category = await CategoryModel.findById(categoryId);
         if (!category) {
             return res.status(404).json({
                 message: "No category found"
             });
         }
-
-        // 2. السطر السحري: بندور في موديل المنتجات على أي حاجة تبع الـ categoryId ده
-        // ملاحظة: تأكدي إن الحقل في موديل المنتج اسمه category
         const products = await ProductModel.find({ category: categoryId });
 
-        // 3. بنرجع بيانات القسم ومعاها المنتجات الحقيقية مش مصفوفة فاضية
         return res.status(200).json({
             message: "Category and products found",
             category: category,
-            data: products // الـ JS في الـ Frontend مستني كلمة data
+            data: products 
         });
 
     } catch (error) {

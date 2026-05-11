@@ -12,7 +12,6 @@ export const AddToCart = async (req, res) => {
         }
         const cart = await CartModel.findOne({ userId })
         if (!cart) {
-            // لو معندوش، ننشئ سلة جديدة
             const newCart = await CartModel.create({
                 userId,
                 products: [{ productId, quantity }],
@@ -83,7 +82,6 @@ export const ShowCart = async (req, res) => {
         const userId = req.user._id;
         const cart = await CartModel.findOne({ userId }).populate('products.productId');
         if (!cart) {
-            // Return empty cart instead of 404
             return res.status(200).json({ message: "Cart fetched successfully", cart: { products: [] } });
         }
 
